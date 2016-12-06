@@ -49,7 +49,7 @@ module Codebreaker
       puts @phrases[:no_hints]
     end
 
-    def hints_left_info(hints_left, random_dig)
+    def hints_left_info(random_dig, hints_left)
       puts "#{@phrases[:hints_left]} #{hints_left}"
       puts "#{@phrases[:right_digit]} #{random_dig}"
     end
@@ -65,6 +65,10 @@ module Codebreaker
     def win
       puts @phrases[:win]
       puts @phrases[:ask_for_save]
+    end
+
+    def once_more
+      puts @phrases[:once_more?]
     end
   end
 end

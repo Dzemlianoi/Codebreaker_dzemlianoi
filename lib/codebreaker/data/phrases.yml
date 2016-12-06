@@ -1,5 +1,5 @@
 ---
-:hello: "Hi, my young codebreaker.\n\nIf you want to: \na) Start new game - puts 'NEW'\n
+:hello: "Hi, my young codebreaker.\n\nIf you wanna to:\na) Start new game - puts 'NEW'\n
 b) Load game statistics - puts 'STATS'\n
 c) Exit from game - puts 'EXIT'"
 :ask_for_save: "If you want to save result press y/n"
@@ -17,3 +17,4 @@ c) Exit from game - puts 'EXIT'"
 :right_code: "Right code : "
 :loose: "Sorry, there are no attempts left :( You loose"
 :no_stats: "There are no active statistics now"
+:once_more?: "Wanna one more game? y/n"
