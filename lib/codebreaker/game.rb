@@ -56,12 +56,11 @@ module Codebreaker
       answer = ''
       secret_code_copy = options[:secret_code].split('')
       current_code_copy = current_code.split('')
-      (0...4).each do |k|
-        if options[:secret_code][k] == current_code[k]
-          answer << '+'
-          current_code_copy[k] = nil
-          secret_code_copy[k] = nil
-        end
+      secret_code_copy.each_with_index do |val, key|
+        next unless val == current_code_copy[key]
+        current_code_copy[key] =nil
+        secret_code_copy[key] = nil
+        answer << '+'
       end
       minuses = current_code_copy.compact & secret_code_copy.compact
       minuses.size.times { answer << '-' }
