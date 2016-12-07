@@ -3,7 +3,7 @@ module Codebreaker
     attr_accessor :options, :current_code, :hint_code_digits, :difficulties
 
     def initialize
-      @difficulties = Loader.load('difficulties')
+      self.difficulties = Loader.load('difficulties')
       self.options = {}
       options[:secret_code] = generate_secret_code
     end
@@ -11,9 +11,9 @@ module Codebreaker
     def asign_game_options (name, difficulty)
       options[:name] = name
       options[:difficulty] = difficulty
-      options[:hints] = @difficulties[difficulty][:hints]
+      options[:hints] = difficulties[difficulty][:hints]
       options[:hints_left] = options[:hints].to_i
-      options[:attempts] = @difficulties[difficulty][:attempts]
+      options[:attempts] = difficulties[difficulty][:attempts]
       options[:attempts_left] = options[:attempts]
       self.hint_code_digits = options[:secret_code].clone
     end
