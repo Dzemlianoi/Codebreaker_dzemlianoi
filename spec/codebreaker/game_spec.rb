@@ -16,12 +16,12 @@ module Codebreaker
     context '#assign_game_options' do
       it 'game options should not be empty' do
         subject.send(:asign_game_options, 'Test', :easy)
-        expect(subject.options[:hints]).not_to be_nil
-        expect(subject.options[:name]).not_to be_nil
-        expect(subject.options[:difficulty]).not_to be_nil
-        expect(subject.options[:hints_left]).not_to be_nil
-        expect(subject.options[:attempts]).not_to be_nil
-        expect(subject.options[:attempts_left]).not_to be_nil
+        [
+          :hints, :name, :difficulty, :hints_left,
+          :attempts, :attempts_left
+        ].each do |option|
+          expect(subject.options[option]).not_to be_nil
+        end
         expect(subject.hint_code_digits).not_to be_nil
       end
     end
@@ -110,11 +110,11 @@ module Codebreaker
           ['1234', '6666', ''],
           ['1115', '1231', '+-'],
           ['1231', '1111', '++']
-      ].each do |i|
-        it "should return #{i[2]} if code is - #{i[0]}, atttempt_code is #{i[1]}" do
-          subject.options[:secret_code] = i[0]
-          subject.current_code = i[1]
-          expect(subject.send(:marking_result)).to eq(i[2])
+      ].each do |item|
+        it "should return #{item[2]} if code is - #{item[0]}, atttempt_code is #{item[1]}" do
+          subject.options[:secret_code] = item[0]
+          subject.current_code = item[1]
+          expect(subject.send(:marking_result)).to eq(item[2])
         end
       end
     end
