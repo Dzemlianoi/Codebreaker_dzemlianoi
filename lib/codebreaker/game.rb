@@ -19,7 +19,7 @@ module Codebreaker
     end
 
     def get_hint
-      return false if options[:hints_left].zero?
+      return false unless hints_left?
       options[:hints_left] -= 1
       get_hint_digit
     end
