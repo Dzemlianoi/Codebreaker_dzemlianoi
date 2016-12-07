@@ -73,9 +73,9 @@ module Codebreaker
 
     context 'adopt user operation' do
       [
-          ['hint', :show_hint],
-          ['exit', :exit],
-          ['1234', :retrieve_answer]
+        ['hint', :show_hint],
+        ['exit', :exit],
+        ['1234', :retrieve_answer]
       ].each do |i|
         it "should return #{i[1]} if input is - #{i[0]}" do
           subject.current_input = i[0]
@@ -103,10 +103,10 @@ module Codebreaker
       end
 
       [
-          '1111','0000', '2222', '3333', '4444',
-          '5555', '6666', '1234', '3456'
+        '1111','0000', '2222', '3333', '4444',
+        '5555', '6666', '1234', '3456'
       ].each do |num|
-        it "should return false if code is #{num}" do
+        it "should be truthy if code is #{num}" do
           subject.current_input = num
           expect(subject.send(:code_correct?)).to be_truthy
         end
