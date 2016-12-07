@@ -10,51 +10,40 @@ module Codebreaker
         expect(subject.render).to be_a_kind_of(Render)
       end
 
-      it 'console is a kind of console' do
-        expect(subject.render).to be_a_kind_of(Render)
+      it 'game is a kind of game' do
+        expect(subject.game).to be_a_kind_of(Game)
       end
 
-      it 'console is a kind of console' do
+      it '@stats is a kind of array' do
         expect(subject.instance_variable_get(:@stats)).to be_a_kind_of(Array)
       end
     end
 
     context '#start' do
-      it 'should call "new" method if scenario allowed' do
-        allow(subject).to receive_message_chain(:gets).and_return('new')
-        allow(subject).to receive(:new)
-        expect(subject).to receive(:new)
-        subject.start
-      end
-
-      it 'should call "exit" method if scenario allowed' do
-        allow(subject).to receive_message_chain(:gets).and_return('exit')
-        allow(subject).to receive(:exit)
-        expect(subject).to receive(:exit)
-        subject.start
-      end
-
-      it 'should call "stats" method if scenario allowed' do
-        allow(subject).to receive_message_chain(:gets).and_return('stats')
-        allow(subject).to receive(:stats)
-        expect(subject).to receive(:stats)
-        subject.start
+      ['new', 'exit', 'stats'].each do |action|
+        it "should call #{action} method if scenario allowed" do
+          allow(subject).to receive(:gets) {action}
+          allow(subject).to receive(action.to_sym)
+          expect(subject).to receive(action.to_sym)
+          subject.start
+        end
       end
     end
 
     context 'new' do
-      it 'should receive confirm settings' do
-        allow(subject).to receive(:gaming)
-        allow(subject).to receive(:confirm_settings)
-        expect(subject).to receive(:confirm_settings)
-        subject.send(:new)
+      around(:each) do |example|
+        RSpec::Mocks.with_temporary_scope do
+          allow(subject).to receive(:gaming)
+          allow(subject).to receive(:confirm_settings)
+          example.run
+          subject.send(:new)
+        end
       end
 
-      it 'should receive console' do
-        allow(subject).to receive(:confirm_settings)
-        allow(subject).to receive(:gaming)
-        expect(subject).to receive(:gaming)
-        subject.send(:new)
+      ['gaming', 'confirm_settings'].each do |operation|
+        it "should receive #{operation}" do
+          expect(subject).to receive(operation.to_sym)
+        end
       end
     end
 
@@ -136,7 +125,7 @@ module Codebreaker
       end
     end
 
-    context '#once_mote' do
+    context '#once_more' do
       it 'should have render.once_more' do
         allow(subject).to receive(:accept?) {false}
         allow(subject).to receive(:exit)
