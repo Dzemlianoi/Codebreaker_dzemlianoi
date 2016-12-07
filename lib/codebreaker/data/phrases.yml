@@ -1,7 +1,12 @@
 ---
-:hello: "Hi, my young codebreaker.\n\nIf you wanna to:\na) Start new game - puts 'NEW'\n
+:hello: "\nHi, my young codebreaker.\n
+-------------------------------\n
+If you wanna to:\n
+a) Start new game - puts 'NEW'\n
 b) Load game statistics - puts 'STATS'\n
-c) Exit from game - puts 'EXIT'"
+c) Exit from game - puts 'EXIT'\n
+-------------------------------\n
+Your choice:"
 :ask_for_save: "If you want to save result press y/n"
 :ask_name: "Put your codebreaker's login here:"
 :ask_difficulty: "Choose the difficulty:"
@@ -18,3 +23,4 @@ c) Exit from game - puts 'EXIT'"
 :loose: "Sorry, there are no attempts left :( You loose"
 :no_stats: "There are no active statistics now"
 :once_more?: "Wanna one more game? y/n"
+:wrong_command: "No such command proposed"
