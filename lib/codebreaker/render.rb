@@ -70,5 +70,9 @@ module Codebreaker
     def once_more
       puts @phrases[:once_more?]
     end
+
+    def wrong_command
+      puts @phrases[:wrong_command]
+    end
   end
 end
