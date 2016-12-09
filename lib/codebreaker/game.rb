@@ -23,7 +23,7 @@ module Codebreaker
     end
 
     def hints_left?
-      hints_left > 0
+      self.hints_left > 0
     end
 
     def code_operations(current_code)
@@ -64,19 +64,24 @@ module Codebreaker
 
     def marking_result
       answer = ''
-      secret_code_copy = secret_code.split('')
-      current_code_copy = current_code.split('')
-      secret_code_copy.each_with_index do |val, key|
-        next unless val == current_code_copy[key]
-        current_code_copy[key] =nil
-        secret_code_copy[key] = nil
+      secret_copy = secret_code.split('')
+      current_copy = current_code.split('')
+      secret_copy.each_with_index do |val, key|
+        next unless val == current_copy[key]
+        current_copy[key], secret_copy[key] = nil
         answer << '+'
       end
-      minuses = current_code_copy.compact & secret_code_copy.compact
-      minuses.size.times { answer << '-' }
+
+      [secret_copy, current_copy].each(&:compact!)
+
+      current_copy.each do |digit|
+        next unless secret_copy.include?(digit)
+        answer << '-'
+        secret_copy[secret_copy.find_index(digit)] = nil
+      end
+
       answer
     end
-
 
     def difficulty_info
       difficulties[self.difficulty]

@@ -5,11 +5,10 @@ module Codebreaker
     context '#initialize' do
       it 'difficulties and options should be Hashes' do
         expect(subject.difficulties).to be_a_kind_of(Hash)
-        expect(subject.options).to be_a_kind_of(Hash)
       end
 
       it 'secret code shouldnt be empty' do
-        expect(subject.options[:secret_code].to_s).not_to be_empty
+        expect(subject.secret_code.to_s).not_to be_empty
       end
     end
 
@@ -17,10 +16,9 @@ module Codebreaker
       it 'game options should not be empty' do
         subject.send(:asign_game_options, 'Test', :easy)
         [
-          :hints, :name, :difficulty, :hints_left,
-          :attempts, :attempts_left
+          :name, :difficulty, :hints_left, :attempts_left
         ].each do |option|
-          expect(subject.options[option]).not_to be_nil
+          expect(subject.send(option)).not_to be_nil
         end
         expect(subject.hint_code_digits).not_to be_nil
       end
@@ -29,39 +27,38 @@ module Codebreaker
     context '#get_hint' do
       it 'should return false if no more hints left' do
         allow(subject).to receive(:hints_left?) {false}
-        expect(subject.get_hint).to be_eql(false)
+        expect(subject.get_hint).to be_falsey
       end
 
       it 'should change hints if hints left' do
-        allow(subject).to receive(:hints_left) {true}
         allow(subject).to receive(:get_hint_digit)
-        subject.options[:hints_left] = 10
-        expect{subject.get_hint}.to change{subject.options[:hints_left]}.by(-1)
+        subject.hints_left = 10
+        expect{subject.get_hint}.to change{subject.hints_left}.by(-1)
       end
     end
 
     context '#hints_left?' do
       it 'should be truthy if hints > 0' do
-        subject.options[:hints_left] = 10
+        allow(subject).to receive(:hints_left) {10}
         expect(subject.hints_left?).to be_truthy
       end
 
       it 'should be falsey if hints < 0' do
-        subject.options[:hints_left] = 0
+        allow(subject).to receive(:hints_left) {0}
         expect(subject.hints_left?).to be_falsey
       end
     end
 
     context '#win?' do
       it 'should return true if codes are equal' do
-        subject.current_code = '1234'
-        subject.options[:secret_code] = '1234'
+        allow(subject).to receive(:current_code) {'1234'}
+        allow(subject).to receive(:secret_code) {'1234'}
         expect(subject.send(:win?)).to be_truthy
       end
 
       it 'should return true if codes are equal' do
-        subject.current_code = '1234'
-        subject.options[:secret_code] = '2345'
+        allow(subject).to receive(:current_code) {'1234'}
+        allow(subject).to receive(:secret_code) {'2345'}
         expect(subject.send(:win?)).to be_falsey
       end
     end
@@ -74,19 +71,19 @@ module Codebreaker
 
     context '#get_hint_digit' do
       it 'hint_code_digits size should be decreased by 1' do
-        subject.hint_code_digits = '1234'
-        expect{subject.send(:get_hint_digit)}.to change{subject.hint_code_digits}
+        subject.instance_variable_set(:@hint_code_digits, '1234')
+        expect{subject.send(:get_hint_digit)}.to change{subject.hint_code_digits.size}.by(-1)
       end
     end
 
     context '#hints_left?' do
       it 'should be truthy if attempts > 0' do
-        subject.options[:attempts_left] = 10
+        allow(subject).to receive(:attempts_left) {10}
         expect(subject.send(:attempts_left?)).to be_truthy
       end
 
       it 'should be falsey if attempts < 0' do
-        subject.options[:attempts_left] = 0
+        allow(subject).to receive(:attempts_left) {0}
         expect(subject.send(:attempts_left?)).to be_falsey
       end
     end
@@ -109,11 +106,12 @@ module Codebreaker
           ['1234', '5431', '+--'],
           ['1234', '6666', ''],
           ['1115', '1231', '+-'],
+          ['1221', '2112', '----'],
           ['1231', '1111', '++']
       ].each do |item|
         it "should return #{item[2]} if code is - #{item[0]}, atttempt_code is #{item[1]}" do
-          subject.options[:secret_code] = item[0]
-          subject.current_code = item[1]
+          allow(subject).to receive(:secret_code) {item[0]}
+          allow(subject).to receive(:current_code) {item[1]}
           expect(subject.send(:marking_result)).to eq(item[2])
         end
       end

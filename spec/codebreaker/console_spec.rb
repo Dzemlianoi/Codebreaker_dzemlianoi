@@ -78,7 +78,7 @@ module Codebreaker
         ['1234', :retrieve_answer]
       ].each do |i|
         it "should return #{i[1]} if input is - #{i[0]}" do
-          subject.current_input = i[0]
+          allow(subject).to receive(:current_input) {i[0]}
           allow(subject).to receive(i[1])
           expect(subject).to receive(i[1])
           subject.send(:adopt_user_operation)
@@ -97,7 +97,7 @@ module Codebreaker
     context '#code_correct' do
       ['1239', '12391', '123a', '111', 'aaaa'].each do |num|
         it "should return false if code is #{num}" do
-          subject.current_input = num
+          allow(subject).to receive(:current_input) {num}
           expect(subject.send(:code_correct?)).to be_falsey
         end
       end
@@ -107,7 +107,7 @@ module Codebreaker
         '5555', '6666', '1234', '3456'
       ].each do |num|
         it "should be truthy if code is #{num}" do
-          subject.current_input = num
+          allow(subject).to receive(:current_input) {num}
           expect(subject.send(:code_correct?)).to be_truthy
         end
       end
