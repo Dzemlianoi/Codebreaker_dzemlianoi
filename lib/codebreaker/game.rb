@@ -1,41 +1,51 @@
 module Codebreaker
   class Game
-    attr_accessor :options, :current_code, :hint_code_digits, :difficulties
+    attr_accessor :current_code, :secret_code, :difficulties, :difficulty,
+                  :attempts_left, :hints_left, :hint_code_digits, :name
 
     def initialize
       self.difficulties = Loader.load('difficulties')
-      self.options = {}
-      options[:secret_code] = generate_secret_code
+      self.secret_code = generate_secret_code
     end
 
     def asign_game_options (name, difficulty)
-      options[:name] = name
-      options[:difficulty] = difficulty
-      options[:hints] = difficulties[difficulty][:hints]
-      options[:hints_left] = options[:hints].to_i
-      options[:attempts] = difficulties[difficulty][:attempts]
-      options[:attempts_left] = options[:attempts]
-      self.hint_code_digits = options[:secret_code].clone
+      self.name = name
+      self.difficulty= difficulty
+      self.hints_left = difficulty_info[:hints]
+      self.attempts_left = difficulty_info[:attempts]
+      self.hint_code_digits = secret_code.clone
     end
 
     def get_hint
       return false unless hints_left?
-      options[:hints_left] -= 1
+      self.hints_left -= 1
       get_hint_digit
     end
 
     def hints_left?
-      options[:hints_left] > 0
+      hints_left > 0
     end
 
     def code_operations(current_code)
       self.current_code = current_code
-      options[:attempts] -= 1
+      self.attempts_left -= 1
       marking_result
     end
 
     def win?
-      self.current_code == options[:secret_code]
+      current_code == secret_code
+    end
+
+    def to_h
+      {
+          name: name,
+          difficulty: difficulty,
+          attempts: difficulty_info[:attempts],
+          attempts_left: attempts_left,
+          hints: difficulty_info[:hints],
+          hints_left: hints_left,
+          secret_code: secret_code
+      }
     end
 
     private
@@ -49,12 +59,12 @@ module Codebreaker
     end
 
     def attempts_left?
-      options[:attempts_left] > 0
+      attempts_left > 0
     end
 
     def marking_result
       answer = ''
-      secret_code_copy = options[:secret_code].split('')
+      secret_code_copy = secret_code.split('')
       current_code_copy = current_code.split('')
       secret_code_copy.each_with_index do |val, key|
         next unless val == current_code_copy[key]
@@ -65,6 +75,11 @@ module Codebreaker
       minuses = current_code_copy.compact & secret_code_copy.compact
       minuses.size.times { answer << '-' }
       answer
+    end
+
+
+    def difficulty_info
+      difficulties[self.difficulty]
     end
   end
 end

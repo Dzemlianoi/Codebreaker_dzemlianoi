@@ -48,7 +48,7 @@ module Codebreaker
 
     def gaming
       render.answers_hints_info
-      (0..game.options[:attempts_left]).each do
+      (0..game.attempts_left).each do
         self.current_input = gets.chomp.downcase
         adopt_user_operation
         return win if game.win?
@@ -69,7 +69,7 @@ module Codebreaker
 
     def show_hint
       return render.no_hints unless game.hints_left?
-      render.hints_left_info(game.get_hint, game.options[:hints_left])
+      render.hints_left_info(game.get_hint, game.hints_left)
     end
 
     def retrieve_answer
@@ -88,7 +88,7 @@ module Codebreaker
     end
 
     def loose
-      render.loose
+      render.loose(game.secret_code)
       once_more
     end
 
@@ -104,7 +104,7 @@ module Codebreaker
 
     def save_result
       @stats = Loader.load('statistics') if @stats.none?
-      @stats.push(game.options)
+      @stats.push(game.to_h)
       Loader.save('statistics', @stats)
     end
   end
