@@ -17,7 +17,7 @@ module Codebreaker
     end
 
     def get_hint
-      return false unless hints_left?
+      return unless hints_left?
       self.hints_left -= 1
       get_hint_digit
     end
