@@ -6,7 +6,7 @@ module Codebreaker
 
     def initialize
       @difficulties = Loader.load('difficulties')
-      @attempts_array, @hints_array = []
+
     end
 
     def init_game_options (name, difficulty)
@@ -16,6 +16,7 @@ module Codebreaker
       @attempts_left = difficulty_info[:attempts]
       @secret_code = generate_secret_code
       @hint_code_digits = secret_code.clone
+      @attempts_array, @hints_array = []
       to_h
     end
 
