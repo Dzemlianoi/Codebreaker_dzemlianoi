@@ -16,7 +16,8 @@ module Codebreaker
       @attempts_left = difficulty_info[:attempts]
       @secret_code = generate_secret_code
       @hint_code_digits = secret_code.clone
-      @attempts_array, @hints_array = []
+      @attempts_array = []
+      @hints_array = []
       to_h
     end
 
