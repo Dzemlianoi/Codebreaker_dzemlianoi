@@ -6,12 +6,12 @@ module Codebreaker
 
     def initialize(name, difficulty)
       @difficulties = Loader.load('difficulties')
-      init_game_options(name, difficulty)
+      @name = name
+      @difficulty = difficulty.to_sym
+      init_game_options
     end
 
-    def init_game_options (name, difficulty)
-      @name = name
-      @difficulty= difficulty.to_sym
+    def init_game_options
       @hints_left = difficulty_info[:hints]
       @attempts_left = difficulty_info[:attempts]
       @secret_code = generate_secret_code
