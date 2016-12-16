@@ -1,8 +1,7 @@
 module Codebreaker
   class Game
-    attr_accessor :current_code, :secret_code, :difficulties, :difficulty,
-                  :attempts_left, :hints_left, :hint_code_digits, :name,
-                  :attempts_array, :hints_array
+    attr_accessor :secret_code, :difficulties, :difficulty,:attempts_left,
+                  :hints_left, :hint_code_digits, :name, :attempts_array, :hints_array
 
     def initialize(name, difficulty)
       @difficulties = Loader.load('difficulties')
@@ -32,13 +31,12 @@ module Codebreaker
     end
 
     def code_operations(current_code)
-      @current_code = current_code
       @attempts_left -= 1
-      @attempts_array.push(@current_code)
+      @attempts_array.push(current_code)
     end
 
-    def win?
-      @current_code == @secret_code
+    def win? (code)
+      code == @secret_code
     end
 
     def loose?
@@ -56,7 +54,7 @@ module Codebreaker
     def marking_result(code = nil)
       answer = ''
       secret_copy = @secret_code.split('')
-      current_copy = code ? @current_code.split('') : code.split('')
+      current_copy = code ? code.split('') : @current_code.split('')
       secret_copy.each_with_index do |val, key|
         next unless val == current_copy[key]
         current_copy[key], secret_copy[key] = nil
