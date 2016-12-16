@@ -18,14 +18,6 @@ module Codebreaker
       @hint_code_digits = secret_code.clone
       @attempts_array = []
       @hints_array = []
-      to_h
-    end
-
-    def init_started_game_options(options)
-      options.each do |k,v|
-        instance_variable_set("@#{k}", v)
-      end
-      to_h
     end
 
     def get_hint
@@ -61,10 +53,10 @@ module Codebreaker
       difficulties[@difficulty]
     end
 
-    def marking_result(code)
+    def marking_result(code = nil)
       answer = ''
       secret_copy = @secret_code.split('')
-      current_copy = code.split('')
+      current_copy = code ? @current_code.split('') : code.split('')
       secret_copy.each_with_index do |val, key|
         next unless val == current_copy[key]
         current_copy[key], secret_copy[key] = nil
@@ -91,7 +83,6 @@ module Codebreaker
           hints_array: @hints_array,
           attempts_array: @attempts_array,
           hint_code_digits: @hint_code_digits
-
       }
     end
 
