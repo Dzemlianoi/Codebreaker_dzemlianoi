@@ -4,9 +4,9 @@ module Codebreaker
                   :attempts_left, :hints_left, :hint_code_digits, :name,
                   :attempts_array, :hints_array
 
-    def initialize
+    def initialize(name, difficulty)
       @difficulties = Loader.load('difficulties')
-
+      init_game_options(name, difficulty)
     end
 
     def init_game_options (name, difficulty)
