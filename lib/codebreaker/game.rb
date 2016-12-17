@@ -4,13 +4,13 @@ module Codebreaker
                   :hints_left, :hint_code_digits, :name, :attempts_array, :hints_array
 
     def initialize(name, difficulty)
-      @difficulties = Loader.load('difficulties')
-      @name = name
-      @difficulty = difficulty.to_sym
-      init_game_options
+      @difficulties ||= Loader.load('difficulties')
+      init_game_options(name, difficulty)
     end
 
-    def init_game_options
+    def init_game_options(name, difficulty)
+      @name = name
+      @difficulty = difficulty.to_sym
       @hints_left = difficulty_info[:hints]
       @attempts_left = difficulty_info[:attempts]
       @secret_code = generate_secret_code
@@ -22,12 +22,11 @@ module Codebreaker
     def get_hint
       return unless hints_left?
       @hints_left -= 1
-      hint = get_hint_digit
-      @hints_array.push(hint)
+      @hints_array.push(get_hint_digit)
     end
 
     def hints_left?
-      @hints_left > 0
+      @hints_left.nonzero?
     end
 
     def code_operations(current_code)
@@ -40,21 +39,17 @@ module Codebreaker
     end
 
     def loose?
-      @attempts_left < 0
-    end
-
-    def last_chance
-      @attempts_left == 1
+      @attempts_left.zero?
     end
 
     def difficulty_info
       difficulties[@difficulty]
     end
 
-    def marking_result(code = nil)
+    def marking_result(code)
       answer = ''
       secret_copy = @secret_code.split('')
-      current_copy = code ? code.split('') : @current_code.split('')
+      current_copy = code.split('')
       secret_copy.each_with_index do |val, key|
         next unless val == current_copy[key]
         current_copy[key], secret_copy[key] = nil
